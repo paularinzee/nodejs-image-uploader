@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
 });
 
 // Root route - POST
-app.post("/", upload.single("image"), async (req, res, next) => {
+app.post("/upload", upload.single("image"), async (req, res, next) => {
 
   try {
     const regNo = req.body.number
