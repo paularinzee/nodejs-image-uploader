@@ -1,7 +1,8 @@
 const express = require("express");
+const cors = require("cors");
 const multer = require("multer");
 
-const sendImageToGCS = require('./helpers/sendImageToGCS')
+const sendImageToGCS = require('./helpers/imageUpload');
 const sendSms = require('./helpers/sendsms');
 
 require('dotenv').config()
@@ -12,7 +13,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors())
 app.use(express.urlencoded(({ extended: true })))
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -35,6 +36,12 @@ app.post("/", upload.single("image"), async (req, res, next) => {
   try {
     const regNo = req.body.number
     const userPic = req.file
+    if (!regNo || !userPic) {
+      return res.status(400).json({
+        message: "Registration number and image are required.",
+      });
+    }
+    
     const imageUrl = await sendImageToGCS(userPic)
 
     const msg = `Student with ${regNo} has uploaded his passport`

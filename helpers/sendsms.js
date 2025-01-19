@@ -8,7 +8,7 @@ const sendSms = (msg) => {
   client.messages
     .create({
        body: msg,
-       from: process.env.USER_APPLICATION_PHONE_NUMBER,
+       from: process.env.APPLICATION_PHONE_NUMBER,
        to: process.env.ADMIN_PHONE_NUMBER
      })
     .then(message => console.log(message.sid));
